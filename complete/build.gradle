@@ -1,0 +1,68 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '4.1.0'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'com.google.protobuf' version '0.9.4'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(24)
+    }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+ext {
+    grpcVersion = '1.82.1'
+    protobufVersion = '4.35.1'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "io.grpc:grpc-bom:${grpcVersion}"
+        mavenBom "com.google.protobuf:protobuf-bom:${protobufVersion}"
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'io.grpc:grpc-api'
+    implementation 'io.grpc:grpc-stub'
+    implementation 'io.grpc:grpc-protobuf'
+    implementation 'com.google.protobuf:protobuf-java'
+
+    implementation 'dev.neilmason:connectrpc-spring-boot-starter:0.1.0-SNAPSHOT'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:${protobufVersion}"
+    }
+    plugins {
+        grpc {
+            artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
+        }
+    }
+    generateProtoTasks {
+        all().forEach { task ->
+            task.plugins {
+                grpc {}
+            }
+        }
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
