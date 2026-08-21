@@ -31,19 +31,10 @@ service directly — no proxy, no bridge, no separate REST controller.
 
 - About 15 minutes
 - JDK 24
-- A local clone of
-  [`connectrpc-spring-boot-starter`](https://github.com/neilpmas/connectrpc-spring-boot-starter)
 
-## Publish the Starter Locally
-
-The starter is not on Maven Central yet, so publish it to your local Maven
-repository once before starting (a temporary step until the library is
-published):
-
-```bash
-cd /path/to/connectrpc-spring-boot-starter
-./gradlew publishToMavenLocal
-```
+The [`connectrpc-spring-boot-starter`](https://github.com/neilpmas/connectrpc-spring-boot)
+dependency is pulled straight from Maven Central below — no local clone or
+build needed.
 
 ## Starting Out
 
@@ -100,17 +91,15 @@ reached with a native gRPC client, which a browser cannot speak.
 
 ## Add the Starter Dependency
 
-Add one line to `build.gradle`. Make sure `mavenLocal()` is listed first so the
-starter you just published is found:
+Add one line to `build.gradle`:
 
 ```groovy
 repositories {
-    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
-    implementation 'dev.neilmason:connectrpc-spring-boot-starter:0.1.0-SNAPSHOT'
+    implementation 'dev.neilmason:connectrpc-spring-boot-starter:0.2.1'
     // ... existing dependencies
 }
 ```
